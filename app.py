@@ -3,7 +3,7 @@
 import os
 import jinja2
 import webapp2
-from google.appengine.api import memcache
+#from google.appengine.api import memcache
 import wsd
 from glob import glob
 
@@ -15,9 +15,12 @@ jinja_environment = jinja2.Environment(
 
 
 def get_rulesets():
-    rulesets = memcache.get('rulesets')
-    if rulesets is not None:
-        return rulesets
+    #rulesets = memcache.get('rulesets')
+    #if rulesets is not None:
+    #    return rulesets
+    #else:
+    if False:
+	pass
     else:
         rulesets = []
         for rule_name in (fn[:-9] for fn in glob('*_rules.py')):
@@ -27,8 +30,8 @@ def get_rulesets():
                 wsd.LOG.info('Loaded: {0}'.format(rule_name))
             except Exception, e:
                 wsd.LOG.warn('Not loaded: {0}: {1}'.format(rule_name, e))
-        if not memcache.add('rulesets', rulesets, 3600):
-            wsd.LOG.error('Memcache set failed.')
+        #if not memcache.add('rulesets', rulesets, 3600):
+        #    wsd.LOG.error('Memcache set failed.')
         return rulesets
 
 
@@ -71,3 +74,11 @@ handler = webapp2.WSGIApplication(
     ],
     debug=True
 )
+
+def main():
+    from paste import httpserver
+    port = int(os.environ.get("PORT", 5000))
+    httpserver.serve(handler, host='0.0.0.0', port=port)
+
+if __name__ == '__main__':
+    main()

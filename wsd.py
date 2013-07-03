@@ -393,7 +393,7 @@ def parse_args():
         args.indent = None
     return args
 
-def main(args=parse_args()):
+def main(args):
     '''
     Load text from args.text.
     Load and run rulesets from args.ruleset list.
